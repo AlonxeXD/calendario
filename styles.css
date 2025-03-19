@@ -1,0 +1,257 @@
+/* Reset general para consistencia */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    
+}
+
+/* Cuerpo de la página */
+body {
+    font-family: 'Praise', cursive;
+    background-color: #f0f8ff; /* Fondo azul suave */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 100vh;
+    padding: 10px;
+    overflow: hidden;
+    overflow-x: hidden; /* Impide el desplazamiento horizontal en la página principal */
+}
+
+/* Contenedor principal del calendario */
+#calendar-container {
+    background-color: #f0f8ff;
+    border-radius: 15px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    width: 100%;
+    max-width: 1000px;
+    text-align: center;
+    overflow: hidden;
+    max-height: 100vh;
+    border: 2px solid #c2c8ff;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+/* Contenedor con scroll vertical para el calendario */
+#calendar-wrapper {
+    max-height: calc(80vh - 60px); /* Restar altura del botón para no solaparse */
+    overflow-y: auto; /* Activar scroll vertical */
+    padding-right: 15px; /* Espacio para el scroll */
+}
+
+/* Título del calendario */
+h1 {
+    font-family: 'Praise', cursive;
+    color: #e74c3c;
+    font-size: 36px;
+    margin-bottom: 30px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* El contenedor de todo el calendario */
+#calendar {
+    display: flex;
+    flex-wrap: nowrap; /* Asegura que los meses estén en una sola fila y no se envuelvan */
+    gap: 20px;
+    overflow-x: auto; /* Permite desplazamiento horizontal */
+    padding-bottom: 20px;
+    scrollbar-width: thin; /* Barra de desplazamiento más fina */
+    -ms-overflow-style: none;  /* Para IE y Edge */
+    justify-content: flex-start; /* Asegura que los meses se alineen correctamente */
+    padding-top: 20px; /* Un pequeño espacio en la parte superior */
+}
+
+/* Estilo de la barra de desplazamiento */
+#calendar::-webkit-scrollbar {
+    height: 8px;
+}
+
+#calendar::-webkit-scrollbar-thumb {
+    background: #c0c0ff;
+    border-radius: 5px;
+}
+
+#calendar::-webkit-scrollbar-track {
+    background: #f0f0f0;
+}
+
+/* Estilo de cada mes */
+.month {
+    background-color: #f4f7fc;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    overflow: hidden;
+    position: relative;
+    min-width: 250px;
+    flex: 0 0 auto; /* Impide que los meses se redimensionen */
+    height: auto;
+    border: 2px solid #a3c9f1;
+    transition: transform 0.3s ease;
+}
+
+/* Nombre del mes */
+.month-name {
+    font-family: 'Praise', cursive;
+    font-size: 22px;
+    color: #e74c3c;
+    text-align: center;
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: #ffebf3;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+/* Días de la semana */
+.weekdays,
+.days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr); /* 7 columnas */
+    gap: 10px;
+    justify-items: center;
+}
+
+/* Estilo de los días de la semana */
+.weekdays div {
+    font-weight: bold;
+    color: #6f5b6b;
+    background-color: #ffebf3;
+    padding: 8px;
+    border-radius: 5px;
+    text-align: center;
+    font-size: 16px;
+}
+
+/* Estilo de los días del mes */
+.days div {
+    font-size: 18px;
+    background-color: #fff;
+    color: #5c4d67;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    text-align: center;
+    font-weight: bold;
+}
+
+/* Hover para los días */
+.days div:hover {
+    background-color: #ffebf3;
+    transform: scale(1.1);
+}
+
+/* Días marcados */
+.days div.marked {
+    background-color: #e74c3c;
+    color: white;
+    text-decoration: line-through;
+    font-weight: bold;
+}
+
+/* Estilo para días feriados */
+.days div.holiday {
+    background-color: #ff8c8c;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+    border-radius: 50%;
+}
+
+/* Estilo de la notificación emergente (Toast) */
+#toast {
+    visibility: hidden;
+    min-width: 250px;
+    margin-left: -125px;
+    background-color: #e74c3c;
+    color: white;
+    text-align: center;
+    border-radius: 2px;
+    padding: 16px;
+    position: fixed;
+    z-index: 1;
+    left: 50%;
+    bottom: 30px;
+    font-size: 17px;
+}
+
+#toast.show {
+    visibility: visible;
+    animation: fadeInOut 3s ease-in-out;
+}
+
+/* Animación para el toast */
+@keyframes fadeInOut {
+    0% { bottom: 30px; opacity: 0; }
+    50% { opacity: 1; }
+    100% { bottom: 50px; opacity: 0; }
+}
+
+/* Ajustes para pantallas más pequeñas */
+@media screen and (max-width: 768px) {
+    #calendar-container {
+        padding: 15px;
+    }
+
+    h1 {
+        font-size: 30px;
+    }
+
+    .month-name {
+        font-size: 20px;
+    }
+
+    .weekdays div, .days div {
+        font-size: 14px;
+    }
+
+    /* Hacer que el calendario se acomode en una fila, sin limitación de espacio */
+    #calendar-wrapper {
+        max-height: 60vh; /* Limitar la altura en pantallas más pequeñas */
+        overflow-y: auto;
+    }
+
+    .month {
+        min-width: 250px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    #calendar-container {
+        padding: 10px;
+    }
+
+    h1 {
+        font-size: 24px;
+    }
+
+    .month-name {
+        font-size: 18px;
+    }
+
+    .weekdays div, .days div {
+        font-size: 12px;
+    }
+
+    /* Asegurar que el botón de guardar sea visible */
+    .save-button {
+        position: fixed;
+        bottom: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: #e74c3c;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 25px;
+        font-size: 16px;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        z-index: 10;
+    }
+}
+
